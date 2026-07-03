@@ -1,0 +1,65 @@
+import { useCountdown } from '../../hooks/useCountdown'
+import { cn } from '../../lib/cn'
+
+interface CountdownProps {
+  iso: string
+  tone?: 'navy' | 'light'
+  className?: string
+}
+
+function pad(n: number): string {
+  return String(n).padStart(2, '0')
+}
+
+/** Live countdown display with four elegant tiles. */
+export function Countdown({ iso, tone = 'navy', className }: CountdownProps) {
+  const { days, hours, minutes, seconds, isPast } = useCountdown(iso)
+
+  if (isPast) {
+    return (
+      <p
+        className={cn(
+          'font-display text-xl',
+          tone === 'light' ? 'text-warm-white' : 'text-navy',
+          className,
+        )}
+      >
+        Chuyến bay hạnh phúc đã cất cánh ♥
+      </p>
+    )
+  }
+
+  const units: Array<[string, string]> = [
+    [String(days), 'Ngày'],
+    [pad(hours), 'Giờ'],
+    [pad(minutes), 'Phút'],
+    [pad(seconds), 'Giây'],
+  ]
+
+  const tileClass =
+    tone === 'light'
+      ? 'border-warm-white/25 bg-white/10 text-warm-white backdrop-blur-sm'
+      : 'border-gold/30 bg-warm-white text-navy shadow-sm'
+  const labelClass = tone === 'light' ? 'text-sky-soft' : 'text-navy-400'
+
+  return (
+    <div className={cn('flex items-stretch gap-2.5 sm:gap-3.5', className)}>
+      {units.map(([value, label]) => (
+        <div
+          key={label}
+          className={cn(
+            'flex min-w-[62px] flex-col items-center rounded-xl border px-2 py-2.5 sm:min-w-[74px] sm:py-3',
+            tileClass,
+          )}
+        >
+          <span className="font-mono text-2xl font-bold tabular-nums sm:text-3xl">
+            {value}
+          </span>
+          <span className={cn('label-caps mt-1 text-[9px]', labelClass)}>
+            {label}
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
