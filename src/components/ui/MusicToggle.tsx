@@ -30,7 +30,7 @@ export function MusicToggle({
         'group relative grid place-items-center rounded-full border text-navy transition-colors',
         variant === 'floating'
           ? 'h-12 w-12 border-gold/50 glass shadow-lg'
-          : 'h-11 w-11 border-warm-white/40 bg-white/10 text-warm-white backdrop-blur-sm',
+          : 'h-11 w-11 border-navy/20 bg-white/60 text-navy backdrop-blur-md shadow-sm',
         className,
       )}
     >

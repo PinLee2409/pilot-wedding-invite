@@ -29,7 +29,7 @@ export function HeroSection({
 
   return (
     <section
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-navy px-5 py-16 text-center text-warm-white"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-rose-50 px-5 py-16 text-center text-navy"
       aria-label="Trang bìa thiệp cưới"
     >
       {/* Background: video if provided, otherwise a poster image. */}
@@ -53,8 +53,8 @@ export function HeroSection({
             className="h-full w-full"
           />
         )}
-        {/* Legibility gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-navy/70 via-navy/45 to-navy/85" />
+        {/* Vibrant romantic sky gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#fcdde1]/90 via-[#fef5f6]/70 to-[#f6c5cc]/90" />
       </div>
 
       {/* Ambient sky */}
@@ -62,7 +62,7 @@ export function HeroSection({
       <FlyingPlane />
 
       {/* "Airplane window" frame */}
-      <div className="pointer-events-none absolute inset-3 rounded-[2rem] border border-warm-white/15 sm:inset-5" />
+      <div className="pointer-events-none absolute inset-3 rounded-[2rem] border border-navy/10 sm:inset-5" />
 
       {/* Music toggle — top right */}
       {musicEnabled && (
@@ -84,39 +84,39 @@ export function HeroSection({
       >
         <motion.div
           variants={fadeUp}
-          className="flex items-center gap-2 text-sky-soft"
+          className="flex items-center gap-2 text-navy-400"
         >
-          <span className="h-px w-8 bg-sky-soft/60" />
-          <Plane className="h-4 w-4 rotate-45" strokeWidth={1.5} />
+          <span className="h-px w-8 bg-navy-400/60" />
+          <Plane className="h-4 w-4 rotate-45 text-gold" strokeWidth={1.5} />
           <span className="label-caps text-[11px]">{event.airline}</span>
         </motion.div>
 
         <motion.p
           variants={fadeUp}
-          className="label-caps text-xs text-gold sm:text-sm"
+          className="label-caps text-xs text-gold-dark sm:text-sm"
         >
           {event.kicker}
         </motion.p>
 
         <motion.h1
           variants={fadeUp}
-          className="text-display font-display font-semibold uppercase tracking-wide"
+          className="text-display font-display font-semibold uppercase tracking-wide text-navy"
         >
           Flight to{' '}
-          <span className="block text-gold-shimmer">Forever</span>
+          <span className="block text-gold-dark">Forever</span>
         </motion.h1>
 
         <motion.div
           variants={fadeUp}
-          className="flex items-center justify-center gap-4 font-display text-[clamp(1.5rem,6vw,2.5rem)]"
+          className="flex items-center justify-center gap-4 font-display text-[clamp(1.5rem,6vw,2.5rem)] text-navy"
         >
           <span>{couple.groom.name}</span>
-          <Plane className="h-5 w-5 rotate-45 text-gold" strokeWidth={1.5} />
+          <Plane className="h-5 w-5 rotate-45 text-gold-dark" strokeWidth={1.5} />
           <span>{couple.bride.name}</span>
         </motion.div>
 
         <motion.div variants={fadeUp} className="flex flex-col items-center gap-1">
-          <p className="label-caps text-sm text-warm-white/90">
+          <p className="label-caps text-sm text-navy-600">
             {date.weekday} · {date.displayDate}
           </p>
         </motion.div>
@@ -124,29 +124,29 @@ export function HeroSection({
         {/* Personalised greeting */}
         <motion.div
           variants={fadeUp}
-          className="mt-1 flex flex-col items-center rounded-2xl border border-gold/30 bg-white/10 px-6 py-4 backdrop-blur-sm"
+          className="mt-1 flex flex-col items-center rounded-2xl border border-gold/30 bg-white/60 px-6 py-4 shadow-sm backdrop-blur-md"
         >
           {guestName ? (
             <>
-              <span className="label-caps text-[11px] text-sky-soft">
+              <span className="label-caps text-[11px] text-navy-400">
                 Kính mời
               </span>
-              <span className="mt-1.5 font-display text-2xl font-semibold text-gold-shimmer sm:text-3xl">
+              <span className="mt-1.5 font-display text-2xl font-semibold text-gold-dark sm:text-3xl">
                 {guestName}
               </span>
             </>
           ) : (
-            <span className="font-display text-xl font-semibold text-gold sm:text-2xl">
+            <span className="font-display text-xl font-semibold text-gold-dark sm:text-2xl">
               Trân trọng kính mời
             </span>
           )}
-          <p className="mt-2 text-xs text-sky-soft sm:text-sm">
+          <p className="mt-2 text-xs text-navy-600 sm:text-sm">
             Cùng lên chuyến bay hạnh phúc của chúng mình.
           </p>
         </motion.div>
 
         <motion.div variants={fadeUp}>
-          <Countdown iso={date.iso} tone="light" className="mt-2" />
+          <Countdown iso={date.iso} tone="navy" className="mt-2" />
         </motion.div>
       </motion.div>
 
@@ -155,7 +155,7 @@ export function HeroSection({
         <RunwayLights count={10} className="opacity-80" />
         {!reduce && (
           <motion.div
-            className="flex flex-col items-center text-warm-white/70"
+            className="flex flex-col items-center text-navy/60"
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >

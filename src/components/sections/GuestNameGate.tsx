@@ -59,7 +59,7 @@ export function GuestNameGate({ open, onSubmit, onSkip }: GuestNameGateProps) {
           exit={{ opacity: 0 }}
         >
           <div
-            className="absolute inset-0 bg-navy/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-white/80 backdrop-blur-md"
             onClick={onSkip}
             aria-hidden="true"
           />
@@ -73,11 +73,11 @@ export function GuestNameGate({ open, onSubmit, onSkip }: GuestNameGateProps) {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Ticket header strip */}
-            <div className="flex items-center justify-between bg-navy px-6 py-3 text-warm-white">
-              <span className="label-caps text-[10px] text-sky-soft">
+            <div className="flex items-center justify-between bg-ivory-deep px-6 py-3 text-navy">
+              <span className="label-caps text-[10px] text-navy-400">
                 Boarding Pass
               </span>
-              <Plane className="h-4 w-4 rotate-45 text-gold" strokeWidth={1.5} />
+              <Plane className="h-4 w-4 rotate-45 text-gold-dark" strokeWidth={1.5} />
             </div>
 
             <div className="flex flex-col items-center gap-4 px-6 py-7 text-center">
