@@ -19,20 +19,17 @@ import { BackToTop } from './components/ui/BackToTop'
 
 function App() {
   const reduce = useReducedMotion()
-  const { guestName, setGuestName, hasGuest } = useGuestName()
+  const { guestName, setGuestName } = useGuestName()
   const { isPlaying, toggle, enabled: musicEnabled } = useAudio(
     weddingConfig.music.src,
   )
 
-  // Show the name gate only when the URL has no ?guest= and it hasn't been
-  // dismissed this session.
+  // Show the name gate on every page load / reload.
   const [gateDismissed, setGateDismissed] = useState(false)
-  const gateOpen = !hasGuest && !gateDismissed
+  const gateOpen = !gateDismissed
 
-  // Always open at the top. Browsers default to `scrollRestoration: 'auto'`,
-  // which restores the previous scroll offset on reload / back-forward — that
-  // is what made the page land mid-way instead of on the hero. Switch it off
-  // and force the top on first mount.
+  // Always open at the top. Disable scrollRestoration so the browser doesn't
+  // jump to the previous position on reload / back-forward navigation.
   useEffect(() => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual'

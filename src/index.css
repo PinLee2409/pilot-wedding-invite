@@ -1,34 +1,35 @@
 @import 'tailwindcss';
 
 /*
-  Light Romantic Wedding Invitation — design tokens.
-  Palette: airy pink-cream, warm rose gold, soft rose-wine accent.
-  Bright & luxurious — deliberately avoids any dark/muddy tone.
+  Bright & Luxurious Wedding Invitation — design tokens.
+  Palette: elegant navy-blue + champagne gold + soft ivory.
+  Vibrant, airy, and premium.
 */
 @theme {
-  /* Airy pink-cream neutrals (Brighter, purer) */
-  --color-ivory: #FDF9F8;
-  --color-ivory-deep: #F7ECEB;
-  --color-cream: #FFFFFF;
+  /* Bright airy neutrals */
+  --color-ivory: #FDFCFA;
+  --color-ivory-deep: #F5F0EC;
+  --color-cream: #FFF9F5;
   --color-warm-white: #FFFFFF;
-  --color-beige: #EFE4E1;
+  --color-beige: #EDE6E0;
 
-  /* Soft rose-wine — the romantic accent + readable text */
-  --color-navy: #684F55;
-  --color-navy-700: #7A5F65;
-  --color-navy-600: #93747A;
-  --color-navy-400: #B39299;
+  /* Deep navy — elegant, readable text */
+  --color-navy: #1B2A4A;
+  --color-navy-700: #2C3E66;
+  --color-navy-600: #4A5C80;
+  --color-navy-400: #7A8BA8;
+  --color-navy-500: #5C6D8A;
 
-  /* Warm rose gold + pink accents (Harmonious champagne gold) */
-  --color-gold: #D4A3A3;
-  --color-gold-light: #F0CDCD;
-  --color-gold-dark: #B88282;
-  --color-rose: #E6B3B8;
-  --color-rosegold: #D4A3A3;
+  /* Champagne gold + warm accents */
+  --color-gold: #C8A45C;
+  --color-gold-light: #E8D5A0;
+  --color-gold-dark: #A6843A;
+  --color-rose: #E8B4B8;
+  --color-rosegold: #D4A87C;
 
-  /* Soft romantic pink (very light accents only) */
-  --color-sky: #EAD1D5;
-  --color-sky-soft: #F6EBED;
+  /* Soft sky accents */
+  --color-sky: #C4D8E8;
+  --color-sky-soft: #E8F0F6;
 
   /* Fonts */
   --font-display: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman',
@@ -36,13 +37,15 @@
   --font-sans: 'Montserrat', system-ui, 'Segoe UI', sans-serif;
   --font-mono: 'Space Mono', ui-monospace, 'Consolas', monospace;
 
-  /* Ambient animations (respect reduced-motion below) */
+  /* Ambient animations */
   --animate-drift-slow: drift 60s linear infinite;
   --animate-drift-slower: drift 90s linear infinite;
-  --animate-shimmer: shimmer 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 4s ease-in-out infinite;
   --animate-runway: runway 1.6s ease-in-out infinite;
-  --animate-float: float 7s ease-in-out infinite;
-  --animate-twinkle: twinkle 4s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-twinkle: twinkle 3s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-gentle-rotate: gentle-rotate 20s linear infinite;
 }
 
 @keyframes drift {
@@ -57,10 +60,16 @@
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(0.5deg);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-14px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-6px) rotate(-0.5deg);
   }
 }
 
@@ -82,19 +91,49 @@
   }
   50% {
     opacity: 1;
-    box-shadow: 0 0 12px currentColor;
+    box-shadow: 0 0 14px currentColor;
   }
 }
 
 @keyframes twinkle {
   0%,
   100% {
-    opacity: 0.15;
-    transform: scale(0.7);
+    opacity: 0.1;
+    transform: scale(0.6) rotate(0deg);
   }
   50% {
-    opacity: 0.9;
-    transform: scale(1);
+    opacity: 1;
+    transform: scale(1.1) rotate(180deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(200, 164, 92, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(200, 164, 92, 0.35);
+  }
+}
+
+@keyframes gentle-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -113,15 +152,14 @@
     color: var(--color-navy);
     font-family: var(--font-sans);
     font-size: 16px;
-    /* Medium weight reads noticeably crisper than the default 400 without
-       looking heavy — the base body copy felt too thin before. */
     font-weight: 500;
     line-height: 1.6;
     background-color: var(--color-ivory);
-    /* Soft romantic radial glow */
+    /* Luxurious multi-layered background glow */
     background-image:
-      radial-gradient(120% 75% at 50% -8%, #FFF5F5 0%, transparent 55%),
-      radial-gradient(110% 60% at 50% 108%, #FCE8EA 0%, transparent 60%);
+      radial-gradient(ellipse 130% 80% at 50% -12%, #E8F4FD 0%, transparent 50%),
+      radial-gradient(ellipse 100% 60% at 20% 50%, #FFF5E8 0%, transparent 45%),
+      radial-gradient(ellipse 110% 70% at 50% 110%, #F0E8D8 0%, transparent 55%);
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -138,8 +176,6 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    /* The Cormorant serif is elegant but delicate; 600 keeps it graceful while
-       giving the headings more presence. */
     font-weight: 600;
     letter-spacing: 0.01em;
   }
@@ -151,14 +187,14 @@
     background: var(--color-ivory-deep);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-gold);
+    background: linear-gradient(180deg, var(--color-gold-light), var(--color-gold));
     border-radius: 999px;
     border: 3px solid var(--color-ivory-deep);
   }
 }
 
 @layer components {
-  /* Soft, rounded champagne CTA buttons */
+  /* Premium rounded CTA buttons with glow */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -167,62 +203,73 @@
     border-radius: 9999px;
     padding: 0.85rem 1.7rem;
     font-family: var(--font-sans);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.9rem;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
     cursor: pointer;
     will-change: transform;
     transition:
-      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.35s ease,
-      background-color 0.35s ease,
-      border-color 0.35s ease,
-      color 0.35s ease;
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.4s ease,
+      background-color 0.4s ease,
+      border-color 0.4s ease,
+      color 0.4s ease,
+      filter 0.4s ease;
   }
   .btn:disabled {
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: not-allowed;
   }
   .btn svg {
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .btn-primary {
     color: var(--color-warm-white);
-    background: linear-gradient(135deg, #A87C84 0%, #8A5A63 100%);
-    border: 1px solid color-mix(in srgb, var(--color-gold) 45%, transparent);
-    box-shadow: 0 10px 24px -12px rgba(138, 90, 99, 0.55);
+    background: linear-gradient(135deg, #1B2A4A 0%, #2C3E66 60%, #4A5C80 100%);
+    border: 1px solid rgba(200, 164, 92, 0.4);
+    box-shadow:
+      0 10px 28px -10px rgba(27, 42, 74, 0.5),
+      0 0 0 1px rgba(200, 164, 92, 0.1);
   }
   .btn-primary:not(:disabled):hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 30px -12px rgba(138, 90, 99, 0.65);
+    transform: translateY(-3px);
+    box-shadow:
+      0 18px 36px -10px rgba(27, 42, 74, 0.55),
+      0 0 20px rgba(200, 164, 92, 0.2);
+    filter: brightness(1.1);
   }
   .btn-primary:not(:disabled):hover svg {
-    transform: translateX(2px);
+    transform: translateX(3px);
   }
 
   .btn-ghost {
     color: var(--color-navy);
     background: var(--color-warm-white);
-    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
-    box-shadow: 0 8px 20px -14px rgba(184, 130, 130, 0.45);
+    border: 1px solid rgba(200, 164, 92, 0.45);
+    box-shadow: 0 8px 22px -14px rgba(200, 164, 92, 0.4);
   }
   .btn-ghost:not(:disabled):hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     color: var(--color-gold-dark);
     border-color: var(--color-gold);
-    box-shadow: 0 14px 26px -14px rgba(184, 130, 130, 0.55);
+    box-shadow:
+      0 14px 30px -14px rgba(200, 164, 92, 0.5),
+      0 0 12px rgba(200, 164, 92, 0.15);
   }
 
   .btn-gold {
     color: var(--color-navy);
-    background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
-    border: 1px solid color-mix(in srgb, var(--color-gold-dark) 40%, transparent);
-    box-shadow: 0 10px 24px -12px rgba(184, 130, 130, 0.55);
+    background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 100%);
+    border: 1px solid rgba(166, 132, 58, 0.35);
+    box-shadow: 0 10px 28px -12px rgba(200, 164, 92, 0.5);
   }
   .btn-gold:not(:disabled):hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 30px -12px rgba(184, 130, 130, 0.65);
+    transform: translateY(-3px);
+    box-shadow:
+      0 18px 36px -12px rgba(200, 164, 92, 0.6),
+      0 0 16px rgba(200, 164, 92, 0.2);
+    filter: brightness(1.08);
   }
 }
 
@@ -269,15 +316,15 @@
   }
 
   .glass {
-    background: color-mix(in srgb, var(--color-warm-white) 70%, transparent);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px) saturate(1.3);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
   }
 
   .glass-navy {
-    background: color-mix(in srgb, var(--color-navy) 55%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(27, 42, 74, 0.6);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
   }
 
   /* Subtle paper grain overlay (data-URI SVG noise) */

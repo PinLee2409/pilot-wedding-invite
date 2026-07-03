@@ -29,7 +29,7 @@ export function HeroSection({
 
   return (
     <section
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-rose-50 px-5 py-16 text-center text-navy"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-sky-soft px-5 py-16 text-center text-navy"
       aria-label="Trang bìa thiệp cưới"
     >
       {/* Background: video if provided, otherwise a poster image. */}
@@ -53,8 +53,8 @@ export function HeroSection({
             className="h-full w-full"
           />
         )}
-        {/* Vibrant romantic sky gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fcdde1]/90 via-[#fef5f6]/70 to-[#f6c5cc]/90" />
+        {/* Bright elegant sky gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#E8F4FD]/90 via-[#FDFCFA]/75 to-[#F0E8D8]/85" />
       </div>
 
       {/* Ambient sky */}
