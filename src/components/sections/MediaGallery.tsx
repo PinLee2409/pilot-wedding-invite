@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Heart, Plane, Play } from 'lucide-react'
 import { useReducedMotion } from 'motion/react'
 import type { WeddingConfig } from '../../config/wedding.config'
@@ -29,6 +29,29 @@ interface FrameDef {
   captionIdx?: 0 | 1
   /** Resting angle; straightens on hover. */
   tilt?: string
+}
+
+/**
+ * Every optimized thumbnail in src/assets/marquee — Vite turns the folder
+ * into a list of URLs at build time, so adding/removing files there is all
+ * it takes to change the pool. A fresh random hand is drawn on every visit.
+ */
+const MARQUEE_POOL = Object.values(
+  import.meta.glob('../../assets/marquee/*.jpg', {
+    eager: true,
+    query: '?url',
+    import: 'default',
+  }),
+) as string[]
+
+/** Fisher–Yates shuffle, returning the first `count` cards. */
+function drawRandom<T>(pool: T[], count: number): T[] {
+  const deck = [...pool]
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[deck[i], deck[j]] = [deck[j], deck[i]]
+  }
+  return deck.slice(0, count)
 }
 
 const PORTRAIT = { aspect: 'aspect-[2/3]', share: 'md:flex-[2]' }
@@ -67,14 +90,21 @@ function GalleryFrame({
   index,
   src,
   alt,
+  focus,
 }: {
   frame: FrameDef
   index: number
   src?: string
   alt: string
+  /** object-position class when the photo and frame aspects differ. */
+  focus?: string
 }) {
   const { t } = useI18n()
   const label = `${t.gallery.photo} ${index + 1}`
+  const imgClass = cn(
+    'transition-transform duration-700 ease-out group-hover:scale-[1.04]',
+    focus,
+  )
 
   if (frame.kind === 'polaroid') {
     // A white-bordered polaroid resting at a slight angle; straightens on hover.
@@ -90,7 +120,7 @@ function GalleryFrame({
           alt={alt}
           label={label}
           className={cn('w-full rounded-sm', frame.aspect)}
-          imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          imgClassName={imgClass}
         />
         <figcaption className="shrink-0 pt-2 text-center font-script text-xl leading-none text-navy-600">
           {t.gallery.captions[frame.captionIdx ?? 0]}
@@ -115,7 +145,7 @@ function GalleryFrame({
             alt={alt}
             label={label}
             className={cn('w-full rounded-sm', frame.aspect)}
-            imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            imgClassName={imgClass}
           />
         </div>
       </figure>
@@ -134,7 +164,7 @@ function GalleryFrame({
         frame.kind === 'oval' && 'rounded-[50%]',
         frame.kind === 'wide' && 'rounded-3xl',
       )}
-      imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+      imgClassName={imgClass}
     />
   )
 }
@@ -164,18 +194,18 @@ function WallPanel({ config }: { config: WeddingConfig }) {
  * past each other. Hovering a lane pauses it so a photo can be admired.
  */
 function MarqueeLane({
-  images,
+  srcs,
   reverse = false,
   duration = 32,
   reduce,
 }: {
-  images: GalleryImage[]
+  srcs: string[]
   reverse?: boolean
   duration?: number
   reduce: boolean
 }) {
   const { t } = useI18n()
-  const lane = reduce ? images : [...images, ...images]
+  const lane = reduce ? srcs : [...srcs, ...srcs]
 
   return (
     <div
@@ -190,7 +220,7 @@ function MarqueeLane({
           'flex items-center gap-3',
           reduce
             ? 'w-full overflow-x-auto pb-2'
-            : 'w-max animate-marquee group-hover:[animation-play-state:paused]',
+            : 'w-max animate-marquee will-change-transform group-hover:[animation-play-state:paused]',
         )}
         style={
           reduce
@@ -201,12 +231,12 @@ function MarqueeLane({
               }
         }
       >
-        {lane.map((image, i) => (
-          <Fragment key={image.src + i}>
+        {lane.map((src, i) => (
+          <Fragment key={src + i}>
             <SmartImage
-              src={image.thumb ?? image.src}
+              src={src}
               alt=""
-              label={`${t.gallery.photo} ${(i % images.length) + 1}`}
+              label={`${t.gallery.photo} ${(i % srcs.length) + 1}`}
               fit="natural-h"
               className={cn(
                 'h-24 w-auto shrink-0 rounded-xl border border-gold/20 ring-1 ring-rose/20 shadow-sm transition-transform duration-500 hover:rotate-0 hover:scale-105 sm:h-28',
@@ -230,8 +260,12 @@ export function MediaGallery({ config }: { config: WeddingConfig }) {
   const { images, video, videoPoster } = config.gallery
   const { t } = useI18n()
   const reduce = useReducedMotion()
-  // Second lane shows the collection in reverse order so the two never mirror.
-  const reversedImages = [...images].reverse()
+
+  // Draw 30 random memories from the marquee pool on every page load and
+  // deal them across the two lanes, so each visit scrolls a different mix.
+  const [laneSrcs] = useState(() => drawRandom(MARQUEE_POOL, 30))
+  const laneA = laneSrcs.slice(0, Math.ceil(laneSrcs.length / 2))
+  const laneB = laneSrcs.slice(Math.ceil(laneSrcs.length / 2))
 
   // Pair each wall slot with the next photo from the config, reading order.
   let wallIdx = 0
@@ -303,6 +337,7 @@ export function MediaGallery({ config }: { config: WeddingConfig }) {
                       index={cell.index}
                       src={cell.image?.src}
                       alt={cell.image?.alt ?? ''}
+                      focus={cell.image?.focus}
                     />
                   </RevealItem>
                 ),
@@ -326,8 +361,8 @@ export function MediaGallery({ config }: { config: WeddingConfig }) {
           <Heart className="ml-1.5 inline h-3 w-3 fill-current text-rose" strokeWidth={0} />
         </p>
         <div className="flex flex-col gap-4">
-          <MarqueeLane images={images} duration={34} reduce={!!reduce} />
-          <MarqueeLane images={reversedImages} reverse duration={44} reduce={!!reduce} />
+          <MarqueeLane srcs={laneA} duration={60} reduce={!!reduce} />
+          <MarqueeLane srcs={laneB} reverse duration={75} reduce={!!reduce} />
         </div>
       </Reveal>
     </section>

@@ -42,8 +42,9 @@ export interface GalleryImage {
   src: string
   alt: string
   caption?: string
-  /** Small variant used by the scrolling memory lanes (keeps them light). */
-  thumb?: string
+  /** Tailwind object-position class picking which part of the photo shows
+   *  when its frame has a different aspect (e.g. 'object-top'). */
+  focus?: string
 }
 
 export interface WeddingConfig {
@@ -225,14 +226,15 @@ export const weddingConfig: WeddingConfig = {
 
   gallery: {
     images: [
-      { src: 'images/web/anh_cuoi_1.jpg', thumb: 'images/web/thumb_anh_cuoi_1.jpg', alt: 'Ảnh cưới 1' },
-      { src: 'images/web/anh_cuoi_2.jpg', thumb: 'images/web/thumb_anh_cuoi_2.jpg', alt: 'Ảnh cưới 2' },
-      { src: 'images/web/anh_cuoi_3.jpg', thumb: 'images/web/thumb_anh_cuoi_3.jpg', alt: 'Ảnh cưới 3' },
-      { src: 'images/web/anh_cuoi_4.jpg', thumb: 'images/web/thumb_anh_cuoi_4.jpg', alt: 'Ảnh cưới 4' },
-      { src: 'images/web/anh_cuoi_5.jpg', thumb: 'images/web/thumb_anh_cuoi_5.jpg', alt: 'Ảnh cưới 5' },
-      { src: 'images/web/anh_cuoi_6.jpg', thumb: 'images/web/thumb_anh_cuoi_6.jpg', alt: 'Ảnh cưới 6' },
-      { src: 'images/web/anh_cuoi_7.jpg', thumb: 'images/web/thumb_anh_cuoi_7.jpg', alt: 'Ảnh cưới 7' },
-      { src: 'images/web/anh_cuoi_8.jpg', thumb: 'images/web/thumb_anh_cuoi_8.jpg', alt: 'Ảnh cưới 8' },
+      { src: 'images/web/anh_cuoi_1.jpg', alt: 'Ảnh cưới 1' },
+      // Portrait photo in the wide panorama frame — keep the faces (top) visible.
+      { src: 'images/web/anh_cuoi_2.jpg', alt: 'Ảnh cưới 2', focus: 'object-top' },
+      { src: 'images/web/anh_cuoi_3.jpg', alt: 'Ảnh cưới 3' },
+      { src: 'images/web/anh_cuoi_4.jpg', alt: 'Ảnh cưới 4' },
+      { src: 'images/web/anh_cuoi_5.jpg', alt: 'Ảnh cưới 5' },
+      { src: 'images/web/anh_cuoi_6.jpg', alt: 'Ảnh cưới 6' },
+      { src: 'images/web/anh_cuoi_7.jpg', alt: 'Ảnh cưới 7' },
+      { src: 'images/web/anh_cuoi_8.jpg', alt: 'Ảnh cưới 8' },
     ],
     video: 'videos/prewedding.mp4',
     videoPoster: 'images/prewedding-poster.jpg',

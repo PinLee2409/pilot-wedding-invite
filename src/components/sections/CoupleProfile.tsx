@@ -9,11 +9,14 @@ function ProfileCard({
   side,
   role,
   parents,
+  photoClassName,
 }: {
   person: Person
   side: string
   role: string
   parents: string
+  /** Extra crop/zoom tuning for this person's portrait. */
+  photoClassName?: string
 }) {
   return (
     <div
@@ -35,7 +38,7 @@ function ProfileCard({
           label=""
           className="relative aspect-square w-[clamp(4.5rem,22vw,9rem)] rounded-full border-2 border-gold/40 shadow-md"
           /* Portrait photos: keep the face (upper third) inside the circle. */
-          imgClassName="object-top"
+          imgClassName={cn('object-top', photoClassName)}
         />
       </div>
 
@@ -81,6 +84,8 @@ export function CoupleProfile({
           side={t.couple.brideSide}
           role={t.couple.brideRole}
           parents={t.couple.brideParents}
+          /* Full-body photo — zoom in so the bride's face reads at a glance. */
+          photoClassName="scale-[1.45] origin-[50%_42%]"
         />
       </div>
 
