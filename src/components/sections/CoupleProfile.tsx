@@ -34,6 +34,8 @@ function ProfileCard({
           alt={person.name}
           label=""
           className="relative aspect-square w-[clamp(4.5rem,22vw,9rem)] rounded-full border-2 border-gold/40 shadow-md"
+          /* Portrait photos: keep the face (upper third) inside the circle. */
+          imgClassName="object-top"
         />
       </div>
 

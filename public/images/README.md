@@ -19,3 +19,11 @@ config):
 | `og-cover.jpg`           | Social-share preview (Open Graph)          | 1200 × 630          |
 
 Tip: compress images (e.g. squoosh.app) so the site loads fast on mobile.
+
+## Current setup
+
+Full-resolution masters live in `/photos-original` (git-ignored — they are
+too heavy to ship). The site references the optimized copies in
+`public/images/web/` (long side ≤ 1600 px, JPEG q82, plus `thumb_*` variants
+for the marquee lanes). To regenerate after adding new masters, resize them
+to the same spec and drop the results in `web/`.

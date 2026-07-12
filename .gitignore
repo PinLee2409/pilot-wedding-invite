@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Full-resolution photo masters (huge; the site uses public/images/web/)
+photos-original/
+
 # Claude Code workspace (local tooling — never commit)
 .claude/
 

@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { Heart, Play } from 'lucide-react'
+import { Heart, Plane, Play } from 'lucide-react'
 import { useReducedMotion } from 'motion/react'
 import type { WeddingConfig } from '../../config/wedding.config'
 import type { GalleryImage } from '../../config/wedding.config'
@@ -12,29 +12,54 @@ import { SectionReveal, RevealItem } from '../ui/SectionReveal'
 
 /**
  * Each photo gets its own frame personality — arch, oval, tilted polaroid,
- * wide panorama — so the wall reads like a curated exhibition rather than a
- * uniform grid. Cycles if the couple adds more than six photos.
+ * wide panorama, postage stamp — so the wall reads like a curated exhibition
+ * rather than a uniform grid.
  */
-type FrameKind = 'arch' | 'wide' | 'oval' | 'polaroid' | 'standard'
+type FrameKind = 'arch' | 'wide' | 'oval' | 'polaroid' | 'stamp'
 
 interface FrameDef {
   kind: FrameKind
-  /** Grid placement classes. */
-  span: string
+  /** The photo's natural aspect — the frame hugs it, nothing is squeezed. */
+  aspect: string
+  /** md+ width share, proportional to the aspect, so each row lines up. */
+  share: string
+  /** Placement tweaks for the 2-column mobile grid. */
+  mobile?: string
   /** Index into the localised polaroid captions (t.gallery.captions). */
   captionIdx?: 0 | 1
-  /** Polaroid resting angle; straightens on hover. */
+  /** Resting angle; straightens on hover. */
   tilt?: string
 }
 
-// Spans sum to a full 3×3 pack on md (dense flow), hole-free on mobile too.
-const FRAMES: FrameDef[] = [
-  { kind: 'arch', span: 'row-span-2' },
-  { kind: 'wide', span: 'col-span-2' },
-  { kind: 'oval', span: '' },
-  { kind: 'polaroid', span: 'md:row-span-2', captionIdx: 0, tilt: '-rotate-2' },
-  { kind: 'standard', span: '' },
-  { kind: 'polaroid', span: '', captionIdx: 1, tilt: 'rotate-2' },
+const PORTRAIT = { aspect: 'aspect-[2/3]', share: 'md:flex-[2]' }
+const LANDSCAPE = {
+  aspect: 'aspect-[3/2]',
+  share: 'md:flex-[4.5]',
+  mobile: 'max-md:order-last max-md:col-span-2',
+}
+
+/**
+ * Exhibition wall: three balanced rows. Widths are shared proportionally to
+ * each photo's aspect ratio, so every frame in a row renders the same height
+ * and no photo is ever distorted. 'panel' is the decorative centre plaque
+ * between the two bottom-corner stamp frames.
+ */
+const WALL_ROWS: (FrameDef | 'panel')[][] = [
+  [
+    { kind: 'arch', ...PORTRAIT },
+    { kind: 'wide', ...LANDSCAPE },
+    { kind: 'oval', ...PORTRAIT },
+  ],
+  [
+    { kind: 'polaroid', ...PORTRAIT, captionIdx: 0, tilt: '-rotate-2' },
+    { kind: 'wide', ...LANDSCAPE },
+    { kind: 'polaroid', ...PORTRAIT, captionIdx: 1, tilt: 'rotate-2' },
+  ],
+  [
+    { kind: 'stamp', ...PORTRAIT, tilt: '-rotate-1' },
+    'panel',
+    { kind: 'stamp', ...PORTRAIT, tilt: 'rotate-1' },
+  ],
 ]
 
 function GalleryFrame({
@@ -56,7 +81,7 @@ function GalleryFrame({
     return (
       <figure
         className={cn(
-          'group flex h-full flex-col rounded-lg bg-warm-white p-2.5 pb-2 shadow-[0_14px_30px_-16px_rgba(27,42,74,0.35)] transition-transform duration-500 ease-out hover:rotate-0',
+          'group flex flex-col rounded-lg bg-warm-white p-2.5 pb-2 shadow-[0_14px_30px_-16px_rgba(27,42,74,0.35)] transition-transform duration-500 ease-out hover:rotate-0',
           frame.tilt,
         )}
       >
@@ -64,12 +89,35 @@ function GalleryFrame({
           src={src}
           alt={alt}
           label={label}
-          className="min-h-0 flex-1 rounded-sm"
+          className={cn('w-full rounded-sm', frame.aspect)}
           imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
         <figcaption className="shrink-0 pt-2 text-center font-script text-xl leading-none text-navy-600">
           {t.gallery.captions[frame.captionIdx ?? 0]}
         </figcaption>
+      </figure>
+    )
+  }
+
+  if (frame.kind === 'stamp') {
+    // A postage-stamp frame — white mat with a dashed gold inner border,
+    // a little nod to love letters sent across the sky.
+    return (
+      <figure
+        className={cn(
+          'group rounded-md bg-warm-white p-2 shadow-[0_14px_30px_-16px_rgba(27,42,74,0.35)] transition-transform duration-500 ease-out hover:rotate-0',
+          frame.tilt,
+        )}
+      >
+        <div className="rounded-sm border border-dashed border-gold/50 p-1.5">
+          <SmartImage
+            src={src}
+            alt={alt}
+            label={label}
+            className={cn('w-full rounded-sm', frame.aspect)}
+            imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+        </div>
       </figure>
     )
   }
@@ -80,14 +128,33 @@ function GalleryFrame({
       alt={alt}
       label={label}
       className={cn(
-        'h-full w-full border border-gold/15 shadow-sm transition-shadow duration-500 group-hover:shadow-[0_18px_36px_-20px_rgba(71,35,59,0.5)]',
+        'w-full border border-gold/15 shadow-sm transition-shadow duration-500 group-hover:shadow-[0_18px_36px_-20px_rgba(71,35,59,0.5)]',
+        frame.aspect,
         frame.kind === 'arch' && 'rounded-t-[999px] rounded-b-3xl',
         frame.kind === 'oval' && 'rounded-[50%]',
         frame.kind === 'wide' && 'rounded-3xl',
-        frame.kind === 'standard' && 'rounded-2xl',
       )}
       imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.05]"
     />
+  )
+}
+
+/** Decorative plaque between the two bottom-corner stamps. */
+function WallPanel({ config }: { config: WeddingConfig }) {
+  const { couple, date } = config
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2.5 rounded-3xl border border-gold/25 bg-gradient-to-br from-sky-soft/70 via-warm-white to-ivory p-6 text-center shadow-sm max-md:py-10 md:aspect-[3/2]">
+      <Plane className="h-5 w-5 rotate-45 text-gold" strokeWidth={1.4} />
+      <p className="font-script text-[clamp(1.7rem,4vw,2.6rem)] leading-tight text-navy-600">
+        {couple.groom.name}
+        <span className="mx-2 text-rose">♥</span>
+        {couple.bride.name}
+      </p>
+      <span className="label-caps text-[10px] text-gold-dark">{date.displayDate}</span>
+      {couple.hashtag && (
+        <span className="text-xs text-navy-400">{couple.hashtag}</span>
+      )}
+    </div>
   )
 }
 
@@ -137,11 +204,12 @@ function MarqueeLane({
         {lane.map((image, i) => (
           <Fragment key={image.src + i}>
             <SmartImage
-              src={image.src}
+              src={image.thumb ?? image.src}
               alt=""
               label={`${t.gallery.photo} ${(i % images.length) + 1}`}
+              fit="natural-h"
               className={cn(
-                'h-24 w-36 shrink-0 rounded-xl border border-gold/20 ring-1 ring-rose/20 shadow-sm transition-transform duration-500 hover:rotate-0 hover:scale-105 sm:h-28 sm:w-44',
+                'h-24 w-auto shrink-0 rounded-xl border border-gold/20 ring-1 ring-rose/20 shadow-sm transition-transform duration-500 hover:rotate-0 hover:scale-105 sm:h-28',
                 i % 2 === 0 ? 'rotate-1' : '-rotate-1',
               )}
             />
@@ -164,6 +232,17 @@ export function MediaGallery({ config }: { config: WeddingConfig }) {
   const reduce = useReducedMotion()
   // Second lane shows the collection in reverse order so the two never mirror.
   const reversedImages = [...images].reverse()
+
+  // Pair each wall slot with the next photo from the config, reading order.
+  let wallIdx = 0
+  const wallRows = WALL_ROWS.map((row) =>
+    row.map((item) => {
+      if (item === 'panel') return { panel: true as const }
+      const cell = { panel: false as const, frame: item, image: images[wallIdx] as GalleryImage | undefined, index: wallIdx }
+      wallIdx += 1
+      return cell
+    }),
+  )
 
   return (
     <section
@@ -200,20 +279,36 @@ export function MediaGallery({ config }: { config: WeddingConfig }) {
           </Reveal>
         )}
 
-        {/* Exhibition wall: arch, panorama, oval, polaroid — every frame its
-            own shape so the collection feels curated, not templated. */}
-        <SectionReveal className="mt-10 grid grid-flow-dense auto-rows-[150px] grid-cols-2 gap-4 sm:auto-rows-[180px] md:grid-cols-3">
-          {images.map((image, i) => {
-            const frame = FRAMES[i % FRAMES.length]
-            return (
-              <RevealItem
-                key={image.src + i}
-                className={cn('group h-full', frame.span)}
-              >
-                <GalleryFrame frame={frame} index={i} src={image.src} alt={image.alt} />
-              </RevealItem>
-            )
-          })}
+        {/* Exhibition wall: three balanced rows — arch, panorama, oval,
+            polaroids, and two stamp frames flanking a centre plaque. Every
+            frame hugs its photo's natural ratio, so nothing is distorted. */}
+        <SectionReveal className="mt-10 flex flex-col gap-4">
+          {wallRows.map((row, r) => (
+            <div key={r} className="grid grid-cols-2 gap-4 md:flex md:items-center">
+              {row.map((cell, c) =>
+                cell.panel ? (
+                  <RevealItem
+                    key={c}
+                    className="max-md:order-last max-md:col-span-2 md:flex-[4.5]"
+                  >
+                    <WallPanel config={config} />
+                  </RevealItem>
+                ) : (
+                  <RevealItem
+                    key={c}
+                    className={cn('group', cell.frame.share, cell.frame.mobile)}
+                  >
+                    <GalleryFrame
+                      frame={cell.frame}
+                      index={cell.index}
+                      src={cell.image?.src}
+                      alt={cell.image?.alt ?? ''}
+                    />
+                  </RevealItem>
+                ),
+              )}
+            </div>
+          ))}
         </SectionReveal>
       </div>
 

@@ -42,6 +42,8 @@ export interface GalleryImage {
   src: string
   alt: string
   caption?: string
+  /** Small variant used by the scrolling memory lanes (keeps them light). */
+  thumb?: string
 }
 
 export interface WeddingConfig {
@@ -147,14 +149,14 @@ export const weddingConfig: WeddingConfig = {
       fullName: 'Nguyễn Thảo Nhi',
       role: 'Cô dâu',
       parents: 'Con ông Nguyễn Văn A & bà Trần Thị B',
-      photo: 'images/bride.jpg',
+      photo: 'images/web/anh_nu.jpg',
     },
     groom: {
       name: 'Minh Khôi',
       fullName: 'Lê Minh Khôi',
       role: 'Chú rể · Cơ trưởng',
       parents: 'Con ông Lê Văn C & bà Phạm Thị D',
-      photo: 'images/groom.jpg',
+      photo: 'images/web/anh_nam.jpg',
     },
     hashtag: '#ChuyenBayHanhPhuc',
   },
@@ -223,19 +225,21 @@ export const weddingConfig: WeddingConfig = {
 
   gallery: {
     images: [
-      { src: 'images/gallery-1.jpg', alt: 'Ảnh cưới 1' },
-      { src: 'images/gallery-2.jpg', alt: 'Ảnh cưới 2' },
-      { src: 'images/gallery-3.jpg', alt: 'Ảnh cưới 3' },
-      { src: 'images/gallery-4.jpg', alt: 'Ảnh cưới 4' },
-      { src: 'images/gallery-5.jpg', alt: 'Ảnh cưới 5' },
-      { src: 'images/gallery-6.jpg', alt: 'Ảnh cưới 6' },
+      { src: 'images/web/anh_cuoi_1.jpg', thumb: 'images/web/thumb_anh_cuoi_1.jpg', alt: 'Ảnh cưới 1' },
+      { src: 'images/web/anh_cuoi_2.jpg', thumb: 'images/web/thumb_anh_cuoi_2.jpg', alt: 'Ảnh cưới 2' },
+      { src: 'images/web/anh_cuoi_3.jpg', thumb: 'images/web/thumb_anh_cuoi_3.jpg', alt: 'Ảnh cưới 3' },
+      { src: 'images/web/anh_cuoi_4.jpg', thumb: 'images/web/thumb_anh_cuoi_4.jpg', alt: 'Ảnh cưới 4' },
+      { src: 'images/web/anh_cuoi_5.jpg', thumb: 'images/web/thumb_anh_cuoi_5.jpg', alt: 'Ảnh cưới 5' },
+      { src: 'images/web/anh_cuoi_6.jpg', thumb: 'images/web/thumb_anh_cuoi_6.jpg', alt: 'Ảnh cưới 6' },
+      { src: 'images/web/anh_cuoi_7.jpg', thumb: 'images/web/thumb_anh_cuoi_7.jpg', alt: 'Ảnh cưới 7' },
+      { src: 'images/web/anh_cuoi_8.jpg', thumb: 'images/web/thumb_anh_cuoi_8.jpg', alt: 'Ảnh cưới 8' },
     ],
     video: 'videos/prewedding.mp4',
     videoPoster: 'images/prewedding-poster.jpg',
   },
 
   boardingPass: {
-    poster: 'images/boarding-poster.jpg',
+    poster: 'images/web/anhcuoi_passcard.jpg',
     from: 'Single Life',
     to: 'Forever',
     gate: 'Wedding Hall',
